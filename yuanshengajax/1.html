@@ -1,48 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ajax</title>
 </head>
 <style>
-    #result{
+    #result {
         width: 100px;
         height: 100px;
         border: 1px solid green;
     }
 </style>
-<body>
-     <button id="btn">点击发送</button>
-     <div id="result"></div>
-</body>
-</html>
-<script>
-     const btn=document.getElementById('btn');
-     const result=document.getElementById("result");
-         btn.onclick=function(){
-            //创建对象
-            const xhr=new XMLHttpRequest();
-            //初始化 设置请求方法和url
-             xhr.open('Get','http://127.0.0.1:8400/server');
-             //  发送
-             xhr.send();
-             //事件绑定 返回服务器结果
-            //  readystate是xhr对象中的属性  表示状态 0 1 2 3 4 0-1一次 1-2一次 类推总共四次
-          xhr.onreadystatechange=function(){
-              if(xhr.readyState===4){
-                //    判断状态码 2xx都是成功
-                if(xhr.status>=200&&xhr.status<300){
-                        //  console.log(xhr.status) //响应码
-                        //  console.log(xhr.statusText) //相应字符串
-                        //  console.log(xhr.getAllResponseHeaders) //所有响应头
-                //  console.log(xhr.response); //响应体
-                result.innerHTML=xhr.response;
-                }else{
 
-                }
-              }
-          }
-         }
-     
+<body>
+    <button id="btn">点击发送</button>
+    <button id="btn1">取消请求</button>
+    <button id="btn2">通用ajax请求</button>
+    <div id="result"></div>
+</body>
+
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    
+    // let xhr=null; //设置一个全局x对象用来取小请求
+    // const btn = document.getElementById('btn');
+    // const btn1=document.getElementById('btn1');
+    // const result = document.getElementById("result");
+    // btn.onclick = function () {
+    //     //创建对象
+    //     xhr=new XMLHttpRequest();
+    //     // const xhr = new XMLHttpRequest();
+    //     // 初始化 设置请求方法和url
+    //     // xhr.open('get', 'http://127.0.0.1:8400/server'); //?分隔符 &连接
+    //          //针对ie缓存
+    //     // xhr.open('get', 'http://127.0.0.1:8400/ie?t='+Date.now()); //这条是针对ie缓存的  在第一次缓存后再更新一次后台的 响应数据再调用还是使用响应前的数据 返回当前时间戳 就会认为是新的
+    //     //延时响应
+    //         //超时设置  2s
+    //         // xhr.timeout=2000; //ajax请求若超2s则ajax取消
+    //          //超时回调
+    //         //   xhr.ontimeout=function(){
+    //         //       alert("超时异常稍后重试")
+    //         //   }
+
+    //            //网络异常回调 onerror当视频的媒体数据夹在数据发生错误时执行 任何错误都会执行
+    //         //    xhr.onerror=function(){
+    //             //    alert("你的网络出异常了");
+    //         //    }
+    //     xhr.open('get', 'http://127.0.0.1:8400/delay'); //?分隔符 &连接
+
+    //     //设置请求头 设置请求体内容的类型
+    //     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    //     // xhr.setRequestHeader('name','feng'); //自定义请求头 不是预定义的头 会报错 后端坐的
+    //     //  设置响应格式 如果原目标格式是普通格式 json不会显示 就是对象：属性  如果不是不会显示
+    //     // xhr.responseType='json';
+    //     //  发送
+    //     xhr.send(); //send中请求体可以随便写 但是要根据实际写
+    //     //事件绑定 返回服务器结果
+    //     //  readystate是xhr对象中的属性  表示状态 0 1 2 3 4 0-1一次 1-2一次 类推总共四次
+    //     xhr.onreadystatechange = function () {
+    //         if (xhr.readyState === 4) {
+    //             //    判断状态码 2xx都是成功
+    //             if (xhr.status >= 200 && xhr.status < 300) {
+    //                 //  console.log(xhr.status) //响应码
+    //                 //  console.log(xhr.statusText) //相应字符串
+    //                 //  console.log(xhr.getAllResponseHeaders) //所有响应头
+    //                 //  console.log(xhr.response); //响应体
+    //                 result.innerHTML = xhr.response;
+    //                 //手动对json数据转化
+    //                 //  let data=JSON.parse(xhr.response);
+    //                 //  console.log(data);
+    //                 //  result.innerHTML=data.name;
+    //                 // console.log(xhr.response);
+    //                   //自动转换  设置响应体数据类型
+    //                     // result.innerHTML=xhr.response.name;
+    //             } else {
+
+    //             }
+    //         }
+    //     }
+    // }
+    // // //ajax手动取消
+    // // btn1.onclick=function(){
+    // //     xhr.abort();
+    // // }
+
+
+    // 重复请求问题
+    //  const btn=document.getElementById("btn");
+    //  let xhr=null;
+    //  let isSending=false; //是否正在发送 
+    //  btn.onclick=function(){
+    //      if(isSending){ 
+    //          xhr.abort();  //记得要设置一个延时器 否则因为响应的太快而无法点击取消
+    //          console.log(isSending);
+    //      }; //如果正在发送则取消该请求，创建一个新的请求
+    //      xhr=new XMLHttpRequest();
+    //       //修改表示变量的值
+    //       isSending=true;
+    //       xhr.open('get', 'http://127.0.0.1:8400/delay');
+    //      xhr.send();
+    //     xhr.onreadystatechange=function(){
+    //         if(xhr.readyState===4){
+    //              //修改标识符变量  //此时不用判断200-300 因为有可能是是请求失败的 若请求成功不用
+    //              isSending=false;
+    //         }
+    //     }
+    //  }
+
+
+
+    //  jquery ajax请求
+    $('#btn').click(function(){
+        $.get('http://127.0.0.1:8400/jquery',{a:100,b:200},function(data){
+             console.log(data);
+        })
+    })
+    $('#btn1').click(function(){
+        $.post('http://127.0.0.1:8400/jquery',{a:100,b:200},function(data){
+             console.log(data);
+        },'json') //json响应数据 要记得设置一个json 对象
+    })
+    $('#btn2').click(function(){
+        $.ajax({
+            url:'http://127.0.0.1:8400/jquery',
+            data:{a:100,b:200},
+            type:'GET',
+            dataType:'json', //响应体结果
+            success:function(data){
+                console.log(data);
+            },
+            timeout:2000,//超时时间 要顶一个定时器 
+             //失败回调
+            error:function(){
+                console.log('出错啦');
+            },
+            //头部信息 自定义的头信息 要改成app.all 并且要允许跨域的自定义头
+             headers:{
+                 c:300,
+                 d:400,
+             }
+        })
+    })
 </script>
