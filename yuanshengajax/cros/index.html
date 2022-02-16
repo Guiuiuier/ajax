@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+      <h1>feng</h1>
+      <button>点击获取用户数据</button>
+</body>
+</html>
+<script>
+
+     var btn=document.querySelectorAll('button')[0];
+     btn.onclick=function(){
+          var x=new XMLHttpRequest();
+        //   script标签本身是支持跨域的
+        // 当需要跨域时 可以在写一个js文件响应 然后通过引入即可
+          //如果满足同源策略 所以url可以简写 /data 浏览器会自动加上
+           x.open("GET",'http://127.0.0.1:9000/data');
+           x.send();
+           x.onreadystatechange=function(){
+               if(x.readyState===4){
+                   if(x.status>=200&&x.status<300){
+                       console.log(x.response);
+                   }
+               }
+           }
+     }
+</script>

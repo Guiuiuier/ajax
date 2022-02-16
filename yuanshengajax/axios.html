@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <button>get</button>
+    <button>post</button>
+    <button>ajax</button>
+</body>
+
+</html>
+<script>
+    var get = document.querySelectorAll('button')[0];
+    var post = document.querySelectorAll('button')[1];
+    var aja = document.querySelectorAll('button')[2];
+    // baseurl参数   对路径进行简化
+    axios.defaults.baseURL = 'http://127.0.0.1:8400';
+    // get.onclick = function () {
+    //     axios.get('http://127.0.0.1:8400/axios', {
+    //         //  url参数
+    //         params: {
+    //             id: 100,
+    //             vip: 7,
+    //         },
+    //         //  请求头信息
+    //         headers: {
+    //             name: 'ad',
+    //             age: 20,
+    //         }
+    //     }).then(value => {
+    //         console.log(value);
+    //     })
+    // }
+    // //post请求
+    // // //请求体
+    // // data: {
+    // //             username: 'admin',
+    // //             password: 'admin'
+    // //         }
+    // post.onclick = function () {
+    //     axios.post('http://127.0.0.1:8400/axios', {
+    //         username: 'admin',
+    //         password: 'admin'
+    //     }, {
+    //         //  url参数
+    //         params: {
+    //             id: 100,
+    //             vip: 7,
+    //         },
+    //         //  请求头信息
+    //         headers: {
+    //             name: 'heds',
+    //             age: 20,
+    //         },
+    //     }).then(value => {
+    //         console.log(value);
+    //     })
+    // }
+
+    // console.log(get);
+
+    //  ajax通用方式
+    // aja.onclick=function(){
+    //      axios({
+    //           //请求方法,
+    //           method:'POST',
+    //          url:'/axios',
+    //          params:{
+    //              vip:10,
+    //              level:10,
+    //          },
+    //          headers:{
+    //              a:100,
+    //              b:200,
+    //          },
+    //          data:{
+    //              username:'dat',
+    //              password:'ds',
+    //          }
+    //      }).then(response=>{
+    //          console.log(response);
+    //      })
+    // }
+
+   
+
+</script>
